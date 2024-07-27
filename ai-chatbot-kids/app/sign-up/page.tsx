@@ -58,7 +58,20 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post("/register/", values);
+      const res = await axios.post(
+        "/register/",
+        {
+          ...values,
+          contact_number: `+91${values.contact_number}`,
+        },
+        {
+          // headers: {
+          //   "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN,
+          //   xsrfCookieName: "csrftoken",
+          //   xsrfHeaderName: "X-CSRFToken",
+          // },
+        }
+      );
       console.log(res);
     } catch (error) {
       console.log(error);

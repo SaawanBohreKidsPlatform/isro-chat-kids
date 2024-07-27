@@ -91,7 +91,7 @@ export default function Login() {
             Lost in Space? Reset Your Password!
           </div>
           <div className="w-full text-center text-gray-400 text-xs mb-10">
-            Don't worry! Let's get you a new one. Enter your username below.
+            {"Don't worry! Let's get you a new one. Enter your username below."}
           </div>
           <div className="w-full px-10 mt-10">
             <Form {...form}>
