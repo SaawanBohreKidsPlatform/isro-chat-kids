@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const roboto = Roboto({
-  weight: '400',
+  weight: "400",
   subsets: ["latin"],
-  variable: '--font-roboto'
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -20,6 +22,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Toaster position="top-right" closeButton />
       <body className={roboto.className}>{children}</body>
     </html>
   );
