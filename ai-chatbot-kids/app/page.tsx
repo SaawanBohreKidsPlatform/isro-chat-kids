@@ -6,11 +6,23 @@ import { ButtonComponent } from "@/components/ButtonComponent";
 import IsroLogo from "@/public/isro-logo.png";
 import LandingHeaderImg from "@/public/landing-header.png";
 import SendIcon from "@/public/send-icon.png";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <main className="flex min-h-screen flex-col items-center pb-10">
       <div className="z-10 w-full flex justify-between items-center font-roboto text-sm py-2 px-32">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
+          )}
+        >
+          <ArrowLeft className="size-6 text-white" />
+        </Link>
         <Link href={"/"}>
           <Image
             src={IsroLogo}
@@ -122,8 +134,8 @@ export default function LandingPage() {
         </div>
       </div>
       <div className="absolute bottom-0 w-full text-center text-gray-400 text-xs py-1.5 shadow-lg shadow-black">
-          Developed by Team GYAAN at URSC
-        </div>
+        Developed by Team GYAAN at URSC
+      </div>
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { z } from "zod";
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
@@ -18,8 +19,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import axios from "@/lib/axios";
-import { Button } from "@/components/ui/button";
+// import axios from "@/lib/axios";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 export default function Login() {
   /* const { data: session } = useSession();
@@ -58,29 +62,43 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post(
-        "/register/",
+      const res = await fetch(
+        "https://backend.isrospaceagent.com/isro-agent/register/",
         {
-          ...values,
-          contact_number: `+91${values.contact_number}`,
-        },
-        {
-          // headers: {
-          //   "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN,
-          //   xsrfCookieName: "csrftoken",
-          //   xsrfHeaderName: "X-CSRFToken",
-          // },
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
+          },
+          body: JSON.stringify({
+            ...values,
+            contact_number: `+91${values.contact_number}`,
+          }),
         }
       );
-      console.log(res);
+      console.log(await res.json());
     } catch (error) {
-      console.log(error);
+      console.log(Object.values(error ?? {}));
     }
   };
+
+  useEffect(() => {
+    document.cookie = `X-CSRFToken=${process.env.NEXT_PUBLIC_CSRF_TOKEN}`;
+  }, []);
 
   return (
     <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black font-roboto text-xl text-white font-bold py-2 pb-5">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
+          )}
+        >
+          <ArrowLeft className="size-6 text-white" />
+        </Link>
         <Image
           src={IsroLogo}
           alt="ISRO Logo"

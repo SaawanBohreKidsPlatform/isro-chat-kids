@@ -19,7 +19,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 export default function ResetPassword() {
   /* const { data: session } = useSession();
@@ -65,6 +67,15 @@ export default function ResetPassword() {
   return (
     <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black font-roboto text-xl text-white font-bold py-2 pb-10">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
+          )}
+        >
+          <ArrowLeft className="size-6 text-white" />
+        </Link>
         <Image
           src={IsroLogo}
           alt="ISRO Logo"

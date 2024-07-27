@@ -10,7 +10,7 @@ import IsroLogo from "@/public/isro-logo.png";
 import FormBackground from "@/public/form-bg.png";
 import FormHeaderImage from "@/public/form-header-img.png";
 import UrscLogo from "@/public/ursc-logo.png";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -19,6 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import axios from "@/lib/axios";
+import { ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Login() {
   /* const { data: session } = useSession();
@@ -53,7 +55,18 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post("/login/", values);
+      const res = await fetch(
+        "https://backend.isrospaceagent.com/isro-agent/login/",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
+          },
+          body: JSON.stringify(values),
+        }
+      );
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -63,6 +76,15 @@ export default function Login() {
   return (
     <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black font-roboto text-xl text-white font-bold py-2 pb-5">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
+          )}
+        >
+          <ArrowLeft className="size-6 text-white" />
+        </Link>
         <Image
           src={IsroLogo}
           alt="ISRO Logo"
