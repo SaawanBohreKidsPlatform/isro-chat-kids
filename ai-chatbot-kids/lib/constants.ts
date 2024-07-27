@@ -1,0 +1,1 @@
+export const DEFAULT_ERROR_MESSAGE = "Unknow error. Please try again afer some time"
