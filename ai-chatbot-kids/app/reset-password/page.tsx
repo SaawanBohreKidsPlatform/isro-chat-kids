@@ -21,11 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
-export default function ResetPassword({
-  reset_token,
-}: {
-  reset_token: string;
-}) {
+export default function ResetPassword() {
   /* const { data: session } = useSession();
   const router = useRouter();
 
@@ -34,6 +30,7 @@ export default function ResetPassword({
       router.push("/");
     }
   }, [session]); */
+  const reset_token = "abcdefghijklmnopqrstuvwxyz";
 
   const formSchema = z.object({
     new_password: z.string(),
