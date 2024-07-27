@@ -54,7 +54,7 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post("/login/", values);
+      const res = await axios.post("/forgot-password/", values);
       console.log(res);
     } catch (error) {
       console.log(error);
