@@ -21,6 +21,7 @@ import {
 import axios from "@/lib/axios";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AUTH_KEY } from "@/lib/constants";
 
 export default function Login() {
   /* const { data: session } = useSession();
@@ -55,7 +56,7 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await fetch(
+      const response = await fetch(
         "https://backend.isrospaceagent.com/isro-agent/login/",
         {
           method: "POST",
@@ -67,7 +68,14 @@ export default function Login() {
           body: JSON.stringify(values),
         }
       );
-      console.log(res);
+      const res = await response.json();
+      localStorage.setItem(
+        AUTH_KEY,
+        JSON.stringify({ user: { ...res } } ?? "{}")
+      );
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
     } catch (error) {
       console.log(error);
     }

@@ -22,17 +22,19 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ResetPassword() {
+  const query = useSearchParams();
+  const reset_token = query.get("token");
   /* const { data: session } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     if (session) {
       router.push("/");
     }
   }, [session]); */
-  const reset_token = "abcdefghijklmnopqrstuvwxyz";
 
   const formSchema = z.object({
     new_password: z.string(),
@@ -57,8 +59,23 @@ export default function ResetPassword() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post(`/reset-password/${reset_token}/`, values);
-      console.log(res);
+      const response = await fetch(
+        `https://backend.isrospaceagent.com/isro-agent/reset-password/${reset_token}/`,
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      const res = await response.json();
+      if (res) toast.success("Password reset successfully. Try login now");
+      setTimeout(() => {
+        window.location.href = "/log-in";
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +131,7 @@ export default function ResetPassword() {
                     <FormItem>
                       <FormControl>
                         <input
-                          {...form}
+                          {...field}
                           type="password"
                           className="flex border border-black-400 rounded-lg w-full min-h-10 py-2 px-5 my-2"
                           name="reset-password"
@@ -133,7 +150,7 @@ export default function ResetPassword() {
                     <FormItem>
                       <FormControl>
                         <input
-                          {...form}
+                          {...field}
                           type="password"
                           className="flex border border-black-400 rounded-lg w-full min-h-10 py-2 px-5 my-2"
                           name="confirm-reset-password"

@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
+import { Suspense } from "react";
 
 const roboto = Roboto({
   weight: "400",
@@ -22,8 +23,10 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Toaster position="top-right" closeButton />
-      <body className={roboto.className}>{children}</body>
+      <Suspense>
+        <Toaster position="top-right" closeButton />
+        <body className={roboto.className}>{children}</body>
+      </Suspense>
     </html>
   );
 }

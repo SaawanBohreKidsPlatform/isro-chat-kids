@@ -78,14 +78,11 @@ export default function Login() {
         }
       );
       console.log(await res.json());
+      window.location.href = "/log-in";
     } catch (error) {
       console.log(Object.values(error ?? {}));
     }
   };
-
-  useEffect(() => {
-    document.cookie = `X-CSRFToken=${process.env.NEXT_PUBLIC_CSRF_TOKEN}`;
-  }, []);
 
   return (
     <div className="flex h-screen flex-col items-center">

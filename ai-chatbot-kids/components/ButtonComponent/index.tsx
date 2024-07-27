@@ -6,7 +6,7 @@ interface ButtonComponentProps {
   type?: "submit" | "reset" | "button";
   id?: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent) => void;
   buttonText?: string;
   icon?: JSX.Element | null;
   name?: string;

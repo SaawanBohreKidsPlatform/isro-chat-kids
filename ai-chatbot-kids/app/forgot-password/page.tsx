@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import axios from "@/lib/axios";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Login() {
   /* const { data: session } = useSession();
@@ -55,8 +56,27 @@ export default function Login() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post("/forgot-password/", values);
-      console.log(res);
+      const response = await fetch(
+        "https://backend.isrospaceagent.com/isro-agent/forgot-password/",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      const res = await response.json();
+      console.log(response.status);
+      if (response.status !== 404) {
+        setTimeout(() => {
+          window.location.href = `reset-password?token=${res?.token}`;
+        }, 1000);
+      } else {
+        toast.error("User not found");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +125,7 @@ export default function Login() {
           </div>
           <div className="w-full px-10 mt-10">
             <Form {...form}>
-              <form id="forgotPassForm" onSubmit={() => {}}>
+              <form id="forgotPassForm" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                   control={form.control}
                   name="username"
@@ -126,15 +146,12 @@ export default function Login() {
                   )}
                 />
                 <div className="w-full flex justify-center mt-10 mb-3">
-                  <Link
-                    href={"/reset-password"}
-                    className={cn(
-                      buttonVariants({ variant: "default" }),
-                      "w-full rounded-lg"
-                    )}
+                  <Button
+                    className="w-full rounded-lg"
+                    loading={form.formState.isSubmitting}
                   >
                     Submit
-                  </Link>
+                  </Button>
                 </div>
                 <div className="text-center text-gray-400 text-xs mt-12">
                   Initiative of URSC
