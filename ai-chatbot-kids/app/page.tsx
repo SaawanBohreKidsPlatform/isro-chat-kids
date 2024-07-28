@@ -177,7 +177,7 @@ export default function LandingPage() {
             <Button
               variant="secondary"
               size="sm"
-              className="rounded-xl border md:rounded-full lg:rounded-full lg:h-fit md:h-fit h-8"
+              className="rounded-xl border md:rounded-full lg:rounded-full lg:py-5 md:h-8 h-8"
               onClick={() => {
                 setChatStarted(false);
                 setMessages([]);
@@ -273,7 +273,7 @@ export default function LandingPage() {
               className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="✨ Stars and Constellations"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Stars and Constellations");
+                setTemplateInput("Planets vs Stars");
               }}
             />
             <ButtonComponent
@@ -281,7 +281,7 @@ export default function LandingPage() {
               className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="👩‍🚀 Astronauts and Space Missions"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Astronauts and Space Missions");
+                setTemplateInput("आदित्य-एल1 के बारे में बताओ");
               }}
             />
             <ButtonComponent
@@ -305,7 +305,7 @@ export default function LandingPage() {
               className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="📜 Space Exploration History"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Space Exploration History");
+                setTemplateInput("A Brief History of Space Exploration");
               }}
             />
           </div>
