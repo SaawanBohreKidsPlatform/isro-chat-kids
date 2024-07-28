@@ -84,12 +84,12 @@ export default function Login() {
 
   return (
     <div className="flex h-screen flex-col items-center">
-      <div className="z-10 w-full flex justify-center items-center bg-black font-roboto text-xl text-white font-bold py-2 pb-20">
+      <div className="z-10 w-full flex justify-center items-center bg-black py-2">
         <Link
           href="/"
           className={cn(
-            buttonVariants({ variant: "outline", size: "sm" }),
-            "absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
+            buttonVariants({ variant: "default", size: "sm" }),
+            "hidden md:flex lg:flex absolute left-4 top-4 cursor-pointer bg-transparent hover:bg-black/80"
           )}
         >
           <ArrowLeft className="size-6 text-white" />
@@ -102,13 +102,24 @@ export default function Login() {
           height={24}
           priority
         />
-        ISRO SPACE AGENT
+        <h1 className="font-roboto ml-12 lg:ml-10 md:ml-10 text-2xl lg:text-4xl md:text-4xl font-black bg-gradient-to-r from-[#FF7300] to-[#078DF2] text-transparent bg-clip-text">
+          ISRO SPACE AGENT
+        </h1>
       </div>
       <div
-        className="flex justify-center relative w-full h-full bg-cover bg-top"
+        className="flex justify-center items-center relative w-full h-full bg-cover bg-top p-2"
         style={{ backgroundImage: `url(${FormBackground.src})` }}
       >
-        <div className="items-center w-1/3 bg-white h-fit py-5 rounded-2xl">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "default", size: "sm" }),
+            "flex md:hidden lg:hidden items-center absolute left-2 top-2 cursor-pointer bg-transparent hover:bg-black/80"
+          )}
+        >
+          <ArrowLeft className="size-6 text-white" />
+        </Link>
+        <div className="items-center w-full md:w-3/4 lg:w-1/3 bg-white h-fit py-5 rounded-2xl">
           <div className="flex justify-center w-full">
             <Image
               src={FormHeaderImage}

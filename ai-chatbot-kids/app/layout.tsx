@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-
 import { Toaster } from "@/components/ui/sonner";
 import { Suspense } from "react";
 
@@ -23,6 +22,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/png" href="/isro-logo.png" />
+      </head>
       <Suspense>
         <Toaster position="top-right" closeButton />
         <body className={roboto.className}>{children}</body>

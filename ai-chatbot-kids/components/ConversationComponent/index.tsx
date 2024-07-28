@@ -34,7 +34,7 @@ export const ConversationComponent = ({
   }, [messages.length]);
 
   return (
-    <div className="w-3/5">
+    <div className="w-full lg:w-3/5 px-3 lg:px-0">
       {processing && (
         <div className="w-full h-[37rem] grid place-items-center">
           <Image src="/loader.gif" alt="rocket gif" width={200} height={130} />
@@ -46,7 +46,7 @@ export const ConversationComponent = ({
           if (index % 2 !== 0) {
             return (
               <div
-                className="relative flex flex-col-2 p-4 pr-6 my-6"
+                className="relative flex flex-col-2 p-4 lg:pr-6 my-6"
                 key={index}
               >
                 <div className="h-full relative w-[40px]">
@@ -76,7 +76,7 @@ export const ConversationComponent = ({
                 key={index}
               >
                 <div className="h-full relative w-[40px]">
-                  <div className="p-2 bg-[#63BEFF] rounded-xl">🤖</div>
+                  <div className="p-2 bg-[#63BEFF] rounded-xl">🧑🏽‍🚀</div>
                 </div>
                 <div className="ml-4 text-wrap flex items-center">
                   {msg.response}

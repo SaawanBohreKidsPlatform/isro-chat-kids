@@ -47,7 +47,7 @@ const FeedbackComponent: React.FC<{ chatId?: number }> = ({ chatId }) => {
       <div className="flex items-center space-x-2">
         <ThumbsUp
           className={cn(
-            "size-4 cursor-pointer",
+            "size-4 cursor-pointer hover:text-green-500",
             feedbackStatus && "fill-green-500 text-green-500"
           )}
           onClick={() => {
@@ -57,7 +57,7 @@ const FeedbackComponent: React.FC<{ chatId?: number }> = ({ chatId }) => {
         />
         <ThumbsDown
           className={cn(
-            "size-4 cursor-pointer",
+            "size-4 cursor-pointer hover:text-red-500",
             !isNull(feedbackStatus) &&
               !feedbackStatus &&
               "fill-destructive text-destructive"
