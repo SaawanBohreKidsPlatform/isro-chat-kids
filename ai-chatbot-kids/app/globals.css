@@ -68,7 +68,7 @@
   }
 
   .markdown {
-    @apply prose-sm prose-img:rounded-lg prose-a:text-[#3b82f6] prose-a:underline prose-a:underline-offset-2 prose-ul:list-disc prose-ol:list-decimal prose-h1:text-xl prose-h2:text-lg cursor-text break-words;
+    @apply prose-sm prose-img:rounded-lg prose-a:text-[#3b82f6] prose-a:underline prose-a:underline-offset-2 prose-ul:list-disc prose-ol:list-decimal prose-h1:text-xl prose-h2:text-lg cursor-text;
   }
 }
 

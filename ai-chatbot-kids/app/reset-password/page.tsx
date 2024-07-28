@@ -82,7 +82,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex h-fit flex-col items-center">
+    <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black py-2">
         <Link
           href="/"

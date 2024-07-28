@@ -25,10 +25,9 @@ export default async function RootLayout({
       <head>
         <link rel="icon" type="image/png" href="/isro-logo.png" />
       </head>
-      <Suspense>
-        <Toaster position="top-right" closeButton />
-        <body className={roboto.className}>{children}</body>
-      </Suspense>
+
+      <Toaster position="top-right" closeButton />
+      <body className={roboto.className}>{children}</body>
     </html>
   );
 }

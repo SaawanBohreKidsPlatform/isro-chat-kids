@@ -33,6 +33,20 @@ export default function LandingPage() {
   const [processing, setProcessing] = useState(false);
   const [messages, setMessages] = useState(Array<MessageProps>);
   const [user, setUser] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const promptSuggestions = [
+    {
+      text: "🚀 Planets in our Solar System",
+      className:
+        "invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1",
+    },
+    { text: "✨ Planets vs Stars", className: "" },
+    { text: "👩‍🚀 आदित्य-एल1 के बारे में बताओ", className: "" },
+    { text: "🌕 The Moon and its Phases", className: "" },
+    { text: "🔭 Fun Space Facts", className: "" },
+    { text: "📜 A Brief History of Space Exploration", className: "" },
+  ];
 
   const handleSubmit = async (
     e?:
@@ -149,16 +163,21 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    console.log(templateInput);
     if (templateInput != "") {
       console.log("first");
       handleSubmit();
     }
   }, [templateInput]);
 
+  useEffect(() => {
+    if (window.screen.width > 320 && window.screen.width < 780) {
+      setIsMobile(true);
+    }
+  }, [window.screen.width]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center pb-10 overflow-hidden">
-      <div className="z-10 w-full flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10 bg-white">
+    <div className="flex flex-col items-center h-screen mobile:h-[92vh]">
+      <div className="w-full h-20 flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10 bg-white">
         <Link href={"/"}>
           <Image
             src={IsroLogo}
@@ -233,93 +252,100 @@ export default function LandingPage() {
           )}
         </ul>
       </div>
-      {!chatStarted ? (
-        <div className="relative flex-grow w-full lg:px-48 pb-20">
-          <div className="lg:hidden w-full h-full px-3 md:flex md:justify-center md:px-10 lg:px-10">
-            <Image
-              className="object-contain rounded-xl"
-              src={LandingHeaderMobile}
-              alt=""
-              priority
-            />
-          </div>
-          <div className="hidden lg:block w-full h-full px-2 md:px-10 lg:px-12">
-            <Image
-              className="object-contain rounded-xl"
-              src={LandingHeaderImg}
-              alt=""
-              priority
-            />
-          </div>
-          <div className="relative w-full text-center text-[#6C6C6C] text-sm lg:pt-8 md:pt-8 lg:pb-5 md:pb-5 pt-4 lg:border-b md:border-b md:text-2xl lg:text-sm">
-            <h4>“Explore the wonders of space!”</h4>
-            <h4>“Learn about planets, stars, and beyond.”</h4>
-          </div>
-        </div>
-      ) : null}
-      <div className="absolute lg:bottom-14 left-0 w-full flex flex-col items-center bottom-10 max-h-screen pt-24">
+      <div className="grow h-[75%]">
         {!chatStarted ? (
-          <div className="mt-10 lg:mx-5 md:mx-5 lg:mb-5 md:mb-5 mb-3 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 text-left">
-            <ButtonComponent
-              name="template-query-1"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="🚀 Planets in our Solar System"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Planets in our Solar System");
-              }}
-            />
-            <ButtonComponent
-              name="template-query-2"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="✨ Planets vs Stars"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Planets vs Stars");
-              }}
-            />
-            <ButtonComponent
-              name="template-query-3"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="👩‍🚀 आदित्य-एल1 के बारे में बताओ"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("आदित्य-एल1 के बारे में बताओ");
-              }}
-            />
-            <ButtonComponent
-              name="template-query-4"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="🌕 The Moon and its Phases"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("The Moon and its Phases");
-              }}
-            />
-            <ButtonComponent
-              name="template-query-5"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="🔭 Fun Space Facts"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("Fun Space Facts");
-              }}
-            />
-            <ButtonComponent
-              name="template-query-6"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="📜 A Brief History of Space Exploration"
-              onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
-                setTemplateInput("A Brief History of Space Exploration");
-              }}
-            />
+          <div className="w-full pb-4">
+            <div className="md:hidden w-full h-full px-3 md:justify-center md:px-10 lg:px-10">
+              <Image
+                className="object-contain rounded-xl"
+                src={LandingHeaderMobile}
+                alt=""
+                priority
+              />
+            </div>
+            <div className="mobile:hidden lg:block w-full h-full px-2 md:px-10 lg:px-12">
+              <Image
+                className="object-contain rounded-xl"
+                src={LandingHeaderImg}
+                alt=""
+                priority
+              />
+            </div>
+            <div className="relative w-full text-center text-[#6C6C6C] text-sm lg:pt-8 md:pt-8 lg:pb-5 md:pb-5 pt-4 lg:border-b md:border-b md:text-2xl lg:text-sm">
+              <h4>“Explore the wonders of space!”</h4>
+              <h4>“Learn about planets, stars, and beyond.”</h4>
+            </div>
+          </div>
+        ) : null}
+        {!chatStarted ? (
+          <div className="w-full h-1/3 mobile:h-[40%] flex flex-col justify-end items-center">
+            <div className="lg:mx-5 md:mx-5 lg:mb-5 md:mb-5 mb-3 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-2 text-left">
+              {!isMobile && (
+                <>
+                  <ButtonComponent
+                    name="template-query-1"
+                    className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                    buttonText="🚀 Planets in our Solar System"
+                    onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                      setTemplateInput("Planets in our Solar System");
+                    }}
+                  />
+                  <ButtonComponent
+                    name="template-query-2"
+                    className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                    buttonText="✨ Planets vs Stars"
+                    onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                      setTemplateInput("Planets vs Stars");
+                    }}
+                  />
+                </>
+              )}
+              <ButtonComponent
+                name="template-query-3"
+                className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                buttonText="👩‍🚀 आदित्य-एल1 के बारे में बताओ"
+                onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                  setTemplateInput("आदित्य-एल1 के बारे में बताओ");
+                }}
+              />
+              <ButtonComponent
+                name="template-query-4"
+                className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                buttonText="🌕 The Moon and its Phases"
+                onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                  setTemplateInput("The Moon and its Phases");
+                }}
+              />
+              <ButtonComponent
+                name="template-query-5"
+                className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                buttonText="🔭 Fun Space Facts"
+                onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                  setTemplateInput("Fun Space Facts");
+                }}
+              />
+              <ButtonComponent
+                name="template-query-6"
+                className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+                buttonText="📜 A Brief History of Space Exploration"
+                onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
+                  setTemplateInput("A Brief History of Space Exploration");
+                }}
+              />
+            </div>
           </div>
         ) : (
-          <div className="w-full mb-2 h-full flex justify-center overflow-y-scroll md:px-10">
-            <ConversationComponent
-              messages={messages}
-              processing={processing}
-            />
-          </div>
+          <ConversationComponent messages={messages} processing={processing} />
         )}
-        <div className="relative lg:w-3/5 w-full lg:px-0 md:px-10 px-7 justify-center">
-          <form id="userInput" onSubmit={handleSubmit}>
-            <span className="flex items-center border border-gray-400 rounded-lg lg:rounded-xl md:rounded-xl w-full py-0.5 lg:py-0.5 lg:pl-7 lg:pr-1 px-1 md:pl-5 resize-none">
+      </div>
+      <div className="w-full">
+        <div className="mobile:mb-2 w-full lg:px-0 md:px-10 px-7 flex flex-col items-center">
+          <form
+            id="userInput"
+            onSubmit={handleSubmit}
+            className="w-3/5 mobile:w-full"
+          >
+            <span className="flex items-center border border-gray-400 rounded-lg lg:rounded-xl md:rounded-xl py-0.5 lg:py-0.5 lg:pl-7 lg:pr-1 px-1 md:pl-5 resize-none mb-2">
               <textarea
                 className="resize-none bg-transparent w-full lg:px-0 px-2 focus:outline-none max-h-[3em] overflow-y-auto"
                 ref={inputRef}
@@ -354,13 +380,12 @@ export default function LandingPage() {
               />
             </span>
           </form>
+          <div className="h-8 w-full text-center text-gray-600 text-xs pt-1.5 border-t-2">
+            Developed by Team GYAAN at URSC.
+            <span className="ml-2">Powered by 169Pi</span>
+          </div>
         </div>
       </div>
-
-      <div className="absolute bottom-1 w-full text-center text-gray-600 text-xs pt-1.5 border-t-2">
-        Developed by Team GYAAN at URSC.
-        <span className="ml-2">Powered by 169Pi</span>
-      </div>
-    </main>
+    </div>
   );
 }

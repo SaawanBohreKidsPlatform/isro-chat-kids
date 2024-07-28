@@ -33,59 +33,56 @@ export const ConversationComponent = ({
     scrollToBottom();
   }, [messages.length]);
 
+  if (processing) {
+    return (
+      <div className="w-full h-[30rem] grid place-items-center">
+        <Image src="/loader.gif" alt="rocket gif" width={200} height={130} />
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full lg:w-3/5 px-3 lg:px-0">
-      {processing && (
-        <div className="w-full h-[37rem] grid place-items-center">
-          <Image src="/loader.gif" alt="rocket gif" width={200} height={130} />
-        </div>
-      )}
-      {!processing &&
-        messages.map((msg, index) => {
-          console.log(msg);
-          if (index % 2 !== 0) {
-            return (
-              <div
-                className="relative flex flex-col-2 p-4 lg:pr-6 my-6"
-                key={index}
-              >
-                <div className="h-full relative w-[40px]">
-                  <div className="p-2 bg-[#FFBE71] rounded-xl">🚀</div>
-                </div>
-                <div className="ml-5 text-wrap">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw]}
-                    className="markdown w-full"
-                  >
-                    {msg.response}
-                  </ReactMarkdown>
-                  <div className="my-3">
-                    <AudioComponent audioString={msg.audio} />
+    <div className="mb-2 w-full h-[40rem] mobile:h-[30rem] py-2 overflow-y-auto flex justify-center">
+      <div className="w-full lg:w-3/5 px-3 lg:px-0 mx-auto">
+        {!processing &&
+          messages.map((msg, index) => {
+            if (index % 2 !== 0) {
+              return (
+                <div className="flex p-4 lg:pr-6 my-2" key={index}>
+                  <div className="h-[40px] w-[40px] p-2 bg-[#FFBE71] rounded-xl grid place-items-center">
+                    🚀
                   </div>
-                  <div className="my-3">
+                  <div className="ml-5 text-wrap space-y-4">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeRaw]}
+                      className="markdown w-full"
+                    >
+                      {msg.response}
+                    </ReactMarkdown>
+                    <AudioComponent audioString={msg.audio} />
                     <FeedbackComponent chatId={msg.conversation_id} />
                   </div>
                 </div>
-              </div>
-            );
-          } else {
-            return (
-              <div
-                className="relative rounded-3xl bg-gray-100 flex flex-col-2 p-4 pr-6 my-6 w-fit"
-                key={index}
-              >
-                <div className="h-full relative w-[40px]">
-                  <div className="p-2 bg-[#63BEFF] rounded-xl">🧑🏽‍🚀</div>
+              );
+            } else {
+              return (
+                <div
+                  className="rounded-3xl bg-gray-100 flex flex-col-2 p-4 pr-6 my-6 w-fit"
+                  key={index}
+                >
+                  <div className="h-[40px] w-[40px] p-2 bg-[#63BEFF] rounded-xl">
+                    🧑🏽‍🚀
+                  </div>
+                  <div className="ml-4 text-wrap flex items-center">
+                    {msg.response}
+                  </div>
                 </div>
-                <div className="ml-4 text-wrap flex items-center">
-                  {msg.response}
-                </div>
-              </div>
-            );
-          }
-        })}
-      <div ref={bottomRef} />
+              );
+            }
+          })}
+        <div ref={bottomRef} />
+      </div>
     </div>
   );
 };
