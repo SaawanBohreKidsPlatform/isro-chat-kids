@@ -82,7 +82,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center">
+    <div className="flex h-fit flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black py-2">
         <Link
           href="/"
@@ -96,12 +96,12 @@ export default function ResetPassword() {
         <Image
           src={IsroLogo}
           alt="ISRO Logo"
-          className="flex mr-5"
+          className="flex lg:mr-5 md:mr-5 lg:ml-0 md:ml-0 ml-2"
           width={80}
           height={24}
           priority
         />
-        <h1 className="font-roboto ml-12 lg:ml-10 md:ml-10 text-2xl lg:text-4xl md:text-4xl font-black bg-gradient-to-r from-[#FF7300] to-[#078DF2] text-transparent bg-clip-text">
+        <h1 className="font-roboto ml-8 lg:ml-10 md:ml-10 text-2xl lg:text-4xl md:text-4xl font-black bg-gradient-to-r from-[#FF7300] to-[#078DF2] text-transparent bg-clip-text">
           ISRO SPACE AGENT
         </h1>
       </div>
@@ -118,7 +118,7 @@ export default function ResetPassword() {
         >
           <ArrowLeft className="size-6 text-white" />
         </Link>
-        <div className="items-center w-full md:w-3/4 lg:w-1/3 bg-white h-fit py-5 rounded-2xl">
+        <div className="items-center w-full md:w-3/4 lg:w-1/3 bg-white h-fit py-5 rounded-2xl lg:mt-0 md:mt-0 mt-10">
           <div className="flex justify-center w-full">
             <Image
               src={FormHeaderImage}

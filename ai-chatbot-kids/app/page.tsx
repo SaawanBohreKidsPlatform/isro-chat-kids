@@ -8,22 +8,18 @@ import IsroLogo from "@/public/isro-logo.png";
 import LandingHeaderImg from "@/public/landing-header.png";
 import LandingHeaderMobile from "@/public/landing-header-mobile.png";
 import SendIcon from "@/public/send-icon.png";
-import { cn } from "@/lib/utils";
-import { ArrowLeft, ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import {
   ConversationComponent,
   MessageProps,
 } from "@/components/ConversationComponent";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 import { AUTH_KEY } from "@/lib/constants";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -51,13 +47,7 @@ export default function LandingPage() {
       setChatStarted(true);
     }
 
-    // const formData = new FormData();
-    // formData.append("prompt", templateInput == "" ? userInput : templateInput);
-
-    // console.log(templateInput == "" ? userInput : templateInput);
-
     try {
-      // const res = await axios.post("/chat/", formData);
       const authKey = localStorage.getItem(AUTH_KEY);
 
       if (authKey !== null) {
@@ -155,7 +145,6 @@ export default function LandingPage() {
 
   useEffect(() => {
     const { user } = JSON.parse(localStorage.getItem(AUTH_KEY) ?? "{}");
-
     setUser(user);
   }, []);
 
@@ -168,8 +157,8 @@ export default function LandingPage() {
   }, [templateInput]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center pb-10">
-      <div className="z-10 w-full flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10">
+    <main className="flex min-h-screen flex-col items-center pb-10 overflow-hidden">
+      <div className="z-10 w-full flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10 bg-white">
         <Link href={"/"}>
           <Image
             src={IsroLogo}
@@ -188,7 +177,7 @@ export default function LandingPage() {
             <Button
               variant="secondary"
               size="sm"
-              className="rounded-xl border md:rounded-full lg:rounded-full"
+              className="rounded-xl border md:rounded-full lg:rounded-full lg:h-fit md:h-fit h-8"
               onClick={() => {
                 setChatStarted(false);
                 setMessages([]);
@@ -246,7 +235,7 @@ export default function LandingPage() {
       </div>
       {!chatStarted ? (
         <div className="relative flex-grow w-full lg:px-48 pb-20">
-          <div className="lg:hidden w-full h-full px-2 md:flex md:justify-center md:px-10 lg:px-10">
+          <div className="lg:hidden w-full h-full px-3 md:flex md:justify-center md:px-10 lg:px-10">
             <Image
               className="object-contain rounded-xl"
               src={LandingHeaderMobile}
@@ -262,18 +251,18 @@ export default function LandingPage() {
               priority
             />
           </div>
-          <div className="relative w-full text-center text-[#6C6C6C] text-sm pt-8 pb-5 border-b md:text-2xl lg:text-sm">
+          <div className="relative w-full text-center text-[#6C6C6C] text-sm lg:pt-8 md:pt-8 lg:pb-5 md:pb-5 pt-4 lg:border-b md:border-b md:text-2xl lg:text-sm">
             <h4>“Explore the wonders of space!”</h4>
             <h4>“Learn about planets, stars, and beyond.”</h4>
           </div>
         </div>
       ) : null}
-      <div className="absolute bottom-0 left-0 w-full flex flex-col items-center lg:pb-14 pb-10 max-h-screen pt-[5.4rem]">
+      <div className="absolute bottom-0 left-0 w-full flex flex-col items-center lg:pb-14 pb-10 max-h-screen pt-24">
         {!chatStarted ? (
-          <div className="mt-10 m-5 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 text-left">
+          <div className="mt-10 lg:mx-5 md:mx-5 lg:mb-5 md:mb-5 mb-3 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 text-left">
             <ButtonComponent
               name="template-query-1"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🚀 Planets in our Solar System"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Planets in our Solar System");
@@ -281,7 +270,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-2"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="✨ Stars and Constellations"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Stars and Constellations");
@@ -289,7 +278,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-3"
-              className="justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="👩‍🚀 Astronauts and Space Missions"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Astronauts and Space Missions");
@@ -297,7 +286,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-4"
-              className="justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🌕 The Moon and its Phases"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("The Moon and its Phases");
@@ -305,7 +294,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-5"
-              className="justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🔭 Fun Space Facts"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Fun Space Facts");
@@ -313,7 +302,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-6"
-              className="justify-center md:px-5 lg:px-5 px-2 lg:py-3 md:py-3 py-1 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="📜 Space Exploration History"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Space Exploration History");
@@ -328,18 +317,18 @@ export default function LandingPage() {
             />
           </div>
         )}
-        <div className="relative lg:w-3/5 w-full lg:px-0 md:px-10 px-5 justify-center">
+        <div className="relative lg:w-3/5 w-full lg:px-0 md:px-10 px-7 justify-center">
           <form id="userInput" onSubmit={handleSubmit}>
-            <span className="flex items-center border border-gray-400 rounded-2xl w-full py-2 lg:px-7 px-1 md:pl-5 resize-none">
+            <span className="flex items-center border border-gray-400 rounded-lg lg:rounded-xl md:rounded-xl w-full py-0.5 lg:py-0.5 lg:pl-7 lg:pr-1 px-1 md:pl-5 resize-none">
               <textarea
-                className="resize-none bg-transparent w-full lg:px-0 px-2 focus:outline-none"
+                className="resize-none bg-transparent w-full lg:px-0 px-2 focus:outline-none max-h-[3em] overflow-y-auto"
                 ref={inputRef}
                 rows={1}
                 name="input-query"
                 value={userInput}
                 id="inputQuery"
                 placeholder={
-                  chatStarted
+                  !chatStarted
                     ? "Ask me about space...!"
                     : "Feel free to ask any follow-ups..."
                 }
@@ -350,10 +339,10 @@ export default function LandingPage() {
               <ButtonComponent
                 type="submit"
                 id="sendInput"
-                className="bg-blue-400 rounded-2xl pl-5 p-3.5"
+                className="bg-blue-400 rounded-lg pl-5 lg:p-2 md:p-2 p-1.5"
                 icon={
                   <Image
-                    className="relative w-5"
+                    className="relative lg:w-5 md:w-5 w-4"
                     src={SendIcon}
                     alt="Next.js Logo"
                     priority
