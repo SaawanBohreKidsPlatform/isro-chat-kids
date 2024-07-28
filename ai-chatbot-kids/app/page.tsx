@@ -257,7 +257,7 @@ export default function LandingPage() {
           </div>
         </div>
       ) : null}
-      <div className="absolute bottom-0 left-0 w-full flex flex-col items-center lg:pb-14 pb-10 max-h-screen pt-24">
+      <div className="absolute lg:bottom-14 left-0 w-full flex flex-col items-center bottom-10 max-h-screen pt-24">
         {!chatStarted ? (
           <div className="mt-10 lg:mx-5 md:mx-5 lg:mb-5 md:mb-5 mb-3 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 text-left">
             <ButtonComponent
@@ -271,7 +271,7 @@ export default function LandingPage() {
             <ButtonComponent
               name="template-query-2"
               className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="✨ Stars and Constellations"
+              buttonText="✨ Planets vs Stars"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Planets vs Stars");
               }}
@@ -279,7 +279,7 @@ export default function LandingPage() {
             <ButtonComponent
               name="template-query-3"
               className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="👩‍🚀 Astronauts and Space Missions"
+              buttonText="👩‍🚀 आदित्य-एल1 के बारे में बताओ"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("आदित्य-एल1 के बारे में बताओ");
               }}
@@ -303,7 +303,7 @@ export default function LandingPage() {
             <ButtonComponent
               name="template-query-6"
               className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
-              buttonText="📜 Space Exploration History"
+              buttonText="📜 A Brief History of Space Exploration"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("A Brief History of Space Exploration");
               }}
@@ -357,7 +357,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 w-full text-center text-gray-600 text-xs py-1.5 shadow-lg shadow-black">
+      <div className="absolute bottom-1 w-full text-center text-gray-600 text-xs pt-1.5 border-t-2">
         Developed by Team GYAAN at URSC.
         <span className="ml-2">Powered by 169Pi</span>
       </div>
