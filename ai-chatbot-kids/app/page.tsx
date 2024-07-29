@@ -157,8 +157,8 @@ export default function LandingPage() {
   }, [templateInput]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center pb-10 overflow-hidden">
-      <div className="z-10 w-full flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10 bg-white">
+    <main className="flex h-screen flex-col items-center mobile:h-[90vh]">
+      <div className="z-10 h-20 w-full flex justify-between items-center text-sm py-2 px-4 lg:px-20 md:px-10 bg-white">
         <Link href={"/"}>
           <Image
             src={IsroLogo}
@@ -234,8 +234,8 @@ export default function LandingPage() {
         </ul>
       </div>
       {!chatStarted ? (
-        <div className="relative flex-grow w-full lg:px-48 pb-20">
-          <div className="lg:hidden w-full h-full px-3 md:flex md:justify-center md:px-10 lg:px-10">
+        <div className="relative w-full lg:px-48">
+          <div className="lg:hidden md:hidden w-full px-3 md:px-10 lg:px-10">
             <Image
               className="object-contain rounded-xl"
               src={LandingHeaderMobile}
@@ -243,7 +243,7 @@ export default function LandingPage() {
               priority
             />
           </div>
-          <div className="hidden lg:block w-full h-full px-2 md:px-10 lg:px-12">
+          <div className="hidden lg:block md:block w-full px-2 md:px-10 lg:px-12">
             <Image
               className="object-contain rounded-xl"
               src={LandingHeaderImg}
@@ -257,12 +257,12 @@ export default function LandingPage() {
           </div>
         </div>
       ) : null}
-      <div className="absolute lg:bottom-14 left-0 w-full flex flex-col items-center bottom-10 max-h-screen pt-24">
+      <div className="absolute lg:bottom-14 left-0 w-full flex flex-col items-center bottom-10 max-h-full pt-28">
         {!chatStarted ? (
           <div className="mt-10 lg:mx-5 md:mx-5 lg:mb-5 md:mb-5 mb-3 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 text-left">
             <ButtonComponent
               name="template-query-1"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="invisible md:visible lg:visible justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#EDEBFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🚀 Planets in our Solar System"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Planets in our Solar System");
@@ -270,7 +270,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-2"
-              className="invisible md:visible lg:visible justify-center md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="invisible md:visible lg:visible justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#E0FFEB] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="✨ Planets vs Stars"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Planets vs Stars");
@@ -278,7 +278,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-3"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#FEE7E7] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="👩‍🚀 आदित्य-एल1 के बारे में बताओ"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("आदित्य-एल1 के बारे में बताओ");
@@ -286,7 +286,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-4"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#E9FFFA] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🌕 The Moon and its Phases"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("The Moon and its Phases");
@@ -294,7 +294,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-5"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#E6F7FE] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="🔭 Fun Space Facts"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("Fun Space Facts");
@@ -302,7 +302,7 @@ export default function LandingPage() {
             />
             <ButtonComponent
               name="template-query-6"
-              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-0.5 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
+              className="justify-center lg:text-md md:text-md text-sm md:px-5 lg:px-5 px-2 lg:py-1 md:py-1 py-1 bg-[#E3ECFF] backdrop-blur-2x lg:static lg:w-auto rounded-lg lg:m-2 m-1"
               buttonText="📜 A Brief History of Space Exploration"
               onClick={(e?: React.MouseEvent<Element, MouseEvent>) => {
                 setTemplateInput("A Brief History of Space Exploration");
@@ -310,7 +310,7 @@ export default function LandingPage() {
             />
           </div>
         ) : (
-          <div className="w-full mb-2 h-full flex justify-center overflow-y-scroll md:px-10">
+          <div className="w-full mb-2 flex justify-center lg:pt-2 overflow-y-auto md:px-10">
             <ConversationComponent
               messages={messages}
               processing={processing}

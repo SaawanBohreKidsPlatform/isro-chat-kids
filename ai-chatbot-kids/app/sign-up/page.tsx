@@ -26,15 +26,7 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 
 export default function Login() {
-  /* const { data: session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      router.push("/");
-    }
-  }, [session]); */
-
+  
   const formSchema = z.object({
     username: z.string(),
     contact_number: z.string().max(10),
@@ -85,7 +77,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-fit flex-col items-center">
+    <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black py-2">
         <Link
           href="/"

@@ -22,6 +22,7 @@ import axios from "@/lib/axios";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AUTH_KEY } from "@/lib/constants";
+import { toast } from "sonner";
 
 export default function Login() {
   /* const { data: session } = useSession();
@@ -69,6 +70,7 @@ export default function Login() {
         }
       );
       const res = await response.json();
+      if (response.status === 200) {
       localStorage.setItem(
         AUTH_KEY,
         JSON.stringify({ user: { ...res } } ?? "{}")
@@ -76,13 +78,16 @@ export default function Login() {
       setTimeout(() => {
         window.location.href = "/";
       }, 1500);
-    } catch (error) {
+    } else {
+      toast.error(res?.error);
+    }
+    } catch (error: any) {
       console.log(error);
     }
   };
 
   return (
-    <div className="flex h-fit flex-col items-center">
+    <div className="flex h-screen flex-col items-center">
       <div className="z-10 w-full flex justify-center items-center bg-black py-2">
         <Link
           href="/"

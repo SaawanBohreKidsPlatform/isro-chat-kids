@@ -34,7 +34,7 @@ export const ConversationComponent = ({
   }, [messages.length]);
 
   return (
-    <div className="w-full lg:w-3/5 px-3 lg:px-0">
+    <div className="w-full lg:w-3/5 px-3 lg:px-0 mx-auto">
       {processing && (
         <div className="w-full h-[37rem] grid place-items-center">
           <Image src="/loader.gif" alt="rocket gif" width={200} height={130} />
