@@ -18,11 +18,13 @@ export interface MessageProps {
 interface ConversationComponentProps {
   messages: Array<MessageProps>;
   processing: boolean;
+  metadata?: any;
 }
 
 export const ConversationComponent = ({
   messages,
   processing = false,
+  metadata,
 }: ConversationComponentProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +44,6 @@ export const ConversationComponent = ({
       )}
       {!processing &&
         messages.map((msg, index) => {
-          console.log(msg);
           if (index % 2 !== 0) {
             return (
               <div
@@ -60,12 +61,16 @@ export const ConversationComponent = ({
                   >
                     {msg.response}
                   </ReactMarkdown>
-                  <div className="my-3">
-                    <AudioComponent audioString={msg.audio} />
-                  </div>
-                  <div className="my-3">
-                    <FeedbackComponent chatId={msg.conversation_id} />
-                  </div>
+                  {metadata && (
+                    <>
+                      <div className="my-3">
+                        <AudioComponent audioString={metadata.audio_encoded} />
+                      </div>
+                      <div className="my-3">
+                        <FeedbackComponent chatId={msg.conversation_id} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             );

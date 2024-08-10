@@ -22,9 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "@/lib/axios";
 
 export default function LandingPage() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const initialRef = useRef(false);
+  const isFirstResponse = useRef<boolean | undefined>();
 
   const [userInput, setUserInput] = useState("");
   const [templateInput, setTemplateInput] = useState("");
@@ -32,7 +35,48 @@ export default function LandingPage() {
   const [busy, setBusy] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [messages, setMessages] = useState(Array<MessageProps>);
+  const [chatId, setChatId] = useState<number | undefined>();
   const [user, setUser] = useState<any>(null);
+  const [chatSocket, setChatSocket] = useState<WebSocket>();
+  const [chatMetadata, setChatMetadata] = useState<any>();
+  const [currentConversationId, setCurrentConversationId] = useState<number | undefined>();
+
+  const createChatSession = async () => {
+    try {
+      const response = await fetch(
+        "https://backend.isrospaceagent.com/isro-agent/project/",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
+          },
+          body: JSON.stringify({}),
+        }
+      );
+      const res = await response.json();
+      setChatId(res.id);
+    } catch (error) {
+      console.error("Error while processing user input", error);
+    }
+  };
+
+  const getChatMetadata = async () => {
+    try {
+      const response = await fetch(`https://backend.isrospaceagent.com/isro-agent/generate_metadata/${currentConversationId}`);
+      const res = await response.json();
+      setChatMetadata(res);
+
+      /* const response = await axios.get(
+        `https://backend.isrospaceagent.com/isro-agent/generate_metadata/${currentConversationId}`
+      );
+      setChatMetadata(response.data[0]); */
+
+    } catch (error) {
+      console.error("Error while processing user input", error);
+    }
+  };
 
   const handleSubmit = async (
     e?:
@@ -48,76 +92,15 @@ export default function LandingPage() {
     }
 
     try {
-      const authKey = localStorage.getItem(AUTH_KEY);
-
-      if (authKey !== null) {
-        const accessToken = JSON.parse(authKey);
-        const response = await fetch(
-          "https://backend.isrospaceagent.com/isro-agent/chat/",
-          {
-            method: "POST",
-            headers: {
-              accept: "application/json",
-              "Content-Type": "application/json",
-              "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
-              Authorization: `Bearer ${accessToken.user.access}`,
-            },
-            body: JSON.stringify({
-              prompt: templateInput == "" ? userInput : templateInput,
-            }),
-          }
+      if (chatSocket) {
+        chatSocket?.send(
+          JSON.stringify({
+            message: templateInput == "" ? userInput : templateInput,
+          })
         );
-        const res = await response.json();
-
-        let previousChat = [...messages];
-        previousChat.push({
-          response: templateInput == "" ? userInput : templateInput,
-          conversation_id: res.conversation_id,
-        });
-        previousChat.push({
-          response: res.response,
-          audio: res.audio,
-          conversation_id: res.conversation_id,
-        });
-
-        setMessages(previousChat);
-      } else {
-        const response = await fetch(
-          "https://backend.isrospaceagent.com/isro-agent/chat/",
-          {
-            method: "POST",
-            headers: {
-              accept: "application/json",
-              "Content-Type": "application/json",
-              "X-CSRFToken": process.env.NEXT_PUBLIC_CSRF_TOKEN ?? "",
-            },
-            body: JSON.stringify({
-              prompt: templateInput == "" ? userInput : templateInput,
-            }),
-          }
-        );
-        const res = await response.json();
-
-        let previousChat = [...messages];
-        previousChat.push({
-          response: templateInput == "" ? userInput : templateInput,
-          conversation_id: res.conversation_id,
-        });
-        previousChat.push({
-          response: res.response,
-          audio: res.audio,
-          conversation_id: res.conversation_id,
-        });
-
-        setMessages(previousChat);
       }
     } catch (error) {
       console.error("Error while processing user input", error);
-    } finally {
-      setBusy(false);
-      setProcessing(false);
-      setUserInput("");
-      setTemplateInput("");
     }
   };
 
@@ -144,14 +127,92 @@ export default function LandingPage() {
   };
 
   useEffect(() => {
+    if (initialRef.current) return;
+    initialRef.current = true;
+
     const { user } = JSON.parse(localStorage.getItem(AUTH_KEY) ?? "{}");
     setUser(user);
+    if (chatId == undefined) {
+      createChatSession();
+    }
   }, []);
 
   useEffect(() => {
-    console.log(templateInput);
+    if (chatId != undefined) {
+      const socket = new WebSocket(
+        "wss://backend.isrospaceagent.com/ws/isro-agent/" + chatId + "/"
+      );
+      setChatSocket(socket);
+    }
+  }, [chatId]);
+
+  useEffect(() => {
+    if (chatId != undefined && chatSocket != undefined) {
+      chatSocket.onmessage = (e: MessageEvent) => {
+        const data = JSON.parse(e.data);
+        if (data.status === null) {
+          setMessages((prevMessages) => {
+            let updatedMessages = [...prevMessages];
+            const newMessage: MessageProps = {
+              response: data.message,
+              conversation_id: chatId,
+            };
+            updatedMessages.push(newMessage);
+            return updatedMessages;
+          });
+          setProcessing(false);
+        } else if (data.status === "Done") {
+          isFirstResponse.current = undefined;
+          setCurrentConversationId(data.chat_id);
+          setBusy(false);
+          setUserInput("");
+          setTemplateInput("");
+        } else if (data.status === "start") {
+          if (isFirstResponse.current == undefined) {
+            setMessages((prevMessages) => {
+              let updatedMessages = [...prevMessages];
+              const newMessage: MessageProps = {
+                response: "",
+                conversation_id: chatId,
+              };
+              updatedMessages.push(newMessage);
+              return updatedMessages;
+            });
+            isFirstResponse.current = false;
+          } else {
+            setMessages((prevMessages) => {
+              let updatedMessages = [...prevMessages];
+              /* const newMessage: MessageProps = {
+                response:
+                  updatedMessages[updatedMessages.length - 1].response +
+                  data.message,
+                conversation_id: chatId,
+              };
+              updatedMessages.pop();
+              updatedMessages.push(newMessage);
+              return updatedMessages; */
+
+              let msgString = updatedMessages[updatedMessages.length - 1].response;
+              let dataIndex = msgString.lastIndexOf(data.message);
+              if (dataIndex < 0 && msgString.indexOf(data.message, msgString.length - 2*dataIndex) >= -1) {
+                updatedMessages[updatedMessages.length - 1].response += data.message;
+              }
+              return updatedMessages;
+            });
+          }
+        }
+      };
+    }
+  }, [chatId, chatSocket]);
+
+  useEffect(() => {
+    if (currentConversationId != undefined) {
+      getChatMetadata();
+    }
+  }, [currentConversationId]);
+
+  useEffect(() => {
     if (templateInput != "") {
-      console.log("first");
       handleSubmit();
     }
   }, [templateInput]);
@@ -181,6 +242,7 @@ export default function LandingPage() {
               onClick={() => {
                 setChatStarted(false);
                 setMessages([]);
+                createChatSession();
               }}
             >
               +<span className="hidden lg:block">&nbsp;New Chat</span>
@@ -314,6 +376,7 @@ export default function LandingPage() {
             <ConversationComponent
               messages={messages}
               processing={processing}
+              metadata={chatMetadata}
             />
           </div>
         )}
