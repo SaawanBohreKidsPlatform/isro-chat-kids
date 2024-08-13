@@ -177,17 +177,29 @@ export default function LandingPage() {
         if (data.status === null) {
           setProcessing(false);
         } else if (data.status === "Done") {
-          setChatMetadata((prevMetadata) => {
-            let oldMetadata = [...prevMetadata];
-            const newMetadata: any = {
-              references: data.message,
-              conversation_id: data.chat_id,
-            };
-            oldMetadata.push(newMetadata);
-            return oldMetadata;
-          });
-          isFirstResponse.current = undefined;
-          setBusy(false);
+          if (isFirstResponse.current == undefined) {
+            setMessages((prevMessages) => {
+              let updatedMessages = [...prevMessages];
+              const newMessage: MessageProps = {
+                response: "Please start a new chat.",
+                conversation_id: undefined,
+              };
+              updatedMessages.push(newMessage);
+              return updatedMessages;
+            });
+          } else if (isFirstResponse.current == false) {
+            setChatMetadata((prevMetadata) => {
+              let oldMetadata = [...prevMetadata];
+              const newMetadata: any = {
+                references: data.message,
+                conversation_id: data.chat_id,
+              };
+              oldMetadata.push(newMetadata);
+              return oldMetadata;
+            });
+            isFirstResponse.current = undefined;
+            setBusy(false);
+          }
         } else if (data.status === "start") {
           if (isFirstResponse.current == undefined) {
             setMessages((prevMessages) => {
@@ -263,6 +275,7 @@ export default function LandingPage() {
                   size="sm"
                   className="rounded-xl border md:rounded-full lg:rounded-full lg:py-5 md:h-8 h-8"
                   onClick={() => {
+                    setBusy(false);
                     setChatStarted(false);
                     setMessages([]);
                     setChatMetadata([]);
