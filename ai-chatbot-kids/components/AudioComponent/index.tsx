@@ -97,7 +97,7 @@ const AudioComponent: React.FC<{ conversation_id?: number }> = ({
     <div className="flex items-center w-full max-w-md rounded-full py-2">
       <button
         onClick={handleButtonClick}
-        className="bg-blue-500 lg:w-40 lg:h-9 md:w-40 md:h-9 text-white px-4 py-2 rounded-xl mr-2 text-sm font-semibold relative"
+        className="bg-blue-500 lg:w-40 lg:h-9 md:w-40 md:h-9 w-40 h-10 text-white px-1 lg:px-4 md:px-4 py-2 rounded-xl mr-2 text-sm font-semibold relative"
         disabled={isLoading}
       >
         {isLoading ? (
