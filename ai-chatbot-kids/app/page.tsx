@@ -22,7 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from "@/lib/axios";
 
 export default function LandingPage() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -38,8 +37,7 @@ export default function LandingPage() {
   const [chatId, setChatId] = useState<number | undefined>();
   const [user, setUser] = useState<any>(null);
   const [chatSocket, setChatSocket] = useState<WebSocket>();
-  const [chatMetadata, setChatMetadata] = useState<any>();
-  const [currentConversationId, setCurrentConversationId] = useState<number | undefined>();
+  const [chatMetadata, setChatMetadata] = useState<Array<any>>([]);
 
   const createChatSession = async () => {
     try {
@@ -57,23 +55,17 @@ export default function LandingPage() {
       );
       const res = await response.json();
       setChatId(res.id);
+      console.log(res, "1");
     } catch (error) {
-      console.error("Error while processing user input", error);
-    }
-  };
-
-  const getChatMetadata = async () => {
-    try {
-      const response = await fetch(`https://backend.isrospaceagent.com/isro-agent/generate_metadata/${currentConversationId}`);
-      const res = await response.json();
-      setChatMetadata(res);
-
-      /* const response = await axios.get(
-        `https://backend.isrospaceagent.com/isro-agent/generate_metadata/${currentConversationId}`
-      );
-      setChatMetadata(response.data[0]); */
-
-    } catch (error) {
+      setMessages((prevMessages) => {
+        let updatedMessages = [...prevMessages];
+        const newMessage: MessageProps = {
+          response: "Error while processing user input. Please connect again.",
+          conversation_id: undefined,
+        };
+        updatedMessages.push(newMessage);
+        return updatedMessages;
+      });
       console.error("Error while processing user input", error);
     }
   };
@@ -85,22 +77,53 @@ export default function LandingPage() {
   ) => {
     e?.preventDefault();
     setBusy(true);
-    setProcessing(true);
 
     if (!chatStarted) {
       setChatStarted(true);
     }
 
+    const newMessage: MessageProps = {
+      response: templateInput == "" ? userInput : templateInput,
+      conversation_id: chatId,
+    };
+    setMessages([...messages, newMessage]);
+
+    console.log(user);
     try {
       if (chatSocket) {
-        chatSocket?.send(
-          JSON.stringify({
-            message: templateInput == "" ? userInput : templateInput,
-          })
-        );
+        if (user !== undefined) {
+          chatSocket?.send(
+            JSON.stringify({
+              message: templateInput == "" ? userInput : templateInput,
+              user_id: user.id,
+            })
+          );
+        } else {
+          chatSocket?.send(
+            JSON.stringify({
+              message: templateInput == "" ? userInput : templateInput,
+              user_id: null,
+            })
+          );
+        }
       }
+      console.log(chatSocket, "2");
     } catch (error) {
+      console.log("Error", error);
+      setMessages((prevMessages) => {
+        let updatedMessages = [...prevMessages];
+        const newMessage: MessageProps = {
+          response: "Error while processing user input. Please connect again.",
+          conversation_id: undefined,
+        };
+        updatedMessages.push(newMessage);
+        return updatedMessages;
+      });
       console.error("Error while processing user input", error);
+    } finally {
+      setUserInput("");
+      setTemplateInput("");
+      setProcessing(true);
     }
   };
 
@@ -143,6 +166,7 @@ export default function LandingPage() {
         "wss://backend.isrospaceagent.com/ws/isro-agent/" + chatId + "/"
       );
       setChatSocket(socket);
+      console.log(chatId, "socket connection");
     }
   }, [chatId]);
 
@@ -151,29 +175,26 @@ export default function LandingPage() {
       chatSocket.onmessage = (e: MessageEvent) => {
         const data = JSON.parse(e.data);
         if (data.status === null) {
-          setMessages((prevMessages) => {
-            let updatedMessages = [...prevMessages];
-            const newMessage: MessageProps = {
-              response: data.message,
-              conversation_id: chatId,
-            };
-            updatedMessages.push(newMessage);
-            return updatedMessages;
-          });
           setProcessing(false);
         } else if (data.status === "Done") {
+          setChatMetadata((prevMetadata) => {
+            let oldMetadata = [...prevMetadata];
+            const newMetadata: any = {
+              references: data.message,
+              conversation_id: data.chat_id,
+            };
+            oldMetadata.push(newMetadata);
+            return oldMetadata;
+          });
           isFirstResponse.current = undefined;
-          setCurrentConversationId(data.chat_id);
           setBusy(false);
-          setUserInput("");
-          setTemplateInput("");
         } else if (data.status === "start") {
           if (isFirstResponse.current == undefined) {
             setMessages((prevMessages) => {
               let updatedMessages = [...prevMessages];
               const newMessage: MessageProps = {
-                response: "",
-                conversation_id: chatId,
+                response: data.message,
+                conversation_id: data.chat_id,
               };
               updatedMessages.push(newMessage);
               return updatedMessages;
@@ -182,21 +203,16 @@ export default function LandingPage() {
           } else {
             setMessages((prevMessages) => {
               let updatedMessages = [...prevMessages];
-              /* const newMessage: MessageProps = {
-                response:
-                  updatedMessages[updatedMessages.length - 1].response +
-                  data.message,
-                conversation_id: chatId,
-              };
-              updatedMessages.pop();
-              updatedMessages.push(newMessage);
-              return updatedMessages; */
+              let lastMessage = updatedMessages[updatedMessages.length - 1];
+              let combinedResponse = lastMessage.response + data.message;
+              combinedResponse = combinedResponse.replace(/\\n/g, "\n");
 
-              let msgString = updatedMessages[updatedMessages.length - 1].response;
-              let dataIndex = msgString.lastIndexOf(data.message);
-              if (dataIndex < 0 && msgString.indexOf(data.message, msgString.length - 2*dataIndex) >= -1) {
-                updatedMessages[updatedMessages.length - 1].response += data.message;
-              }
+              const newMessage: MessageProps = {
+                response: combinedResponse,
+                conversation_id: data.chat_id,
+              };
+
+              updatedMessages[updatedMessages.length - 1] = newMessage;
               return updatedMessages;
             });
           }
@@ -204,12 +220,6 @@ export default function LandingPage() {
       };
     }
   }, [chatId, chatSocket]);
-
-  useEffect(() => {
-    if (currentConversationId != undefined) {
-      getChatMetadata();
-    }
-  }, [currentConversationId]);
 
   useEffect(() => {
     if (templateInput != "") {
@@ -242,6 +252,7 @@ export default function LandingPage() {
               onClick={() => {
                 setChatStarted(false);
                 setMessages([]);
+                setChatMetadata([]);
                 createChatSession();
               }}
             >
@@ -377,11 +388,15 @@ export default function LandingPage() {
               messages={messages}
               processing={processing}
               metadata={chatMetadata}
+              setTemplateInput={setTemplateInput}
             />
           </div>
         )}
         <div className="relative lg:w-3/5 w-full lg:px-0 md:px-10 px-7 justify-center">
-          <form id="userInput" onSubmit={handleSubmit}>
+          <form
+            id="userInput"
+            onSubmit={busy ? () => {} : (e) => handleSubmit(e)}
+          >
             <span className="flex items-center border border-gray-400 rounded-lg lg:rounded-xl md:rounded-xl w-full py-0.5 lg:py-0.5 lg:pl-7 lg:pr-1 px-1 md:pl-5 resize-none">
               <textarea
                 className="resize-none bg-transparent w-full lg:px-0 px-2 focus:outline-none max-h-[3em] overflow-y-auto"
@@ -395,8 +410,8 @@ export default function LandingPage() {
                     ? "Ask me about space...!"
                     : "Feel free to ask any follow-ups..."
                 }
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={enterTextArea}
+                onChange={busy ? () => {} : (e) => setUserInput(e.target.value)}
+                onKeyDown={busy ? () => {} : (e) => enterTextArea(e)}
                 onInput={textareaResize}
               />
               <ButtonComponent
